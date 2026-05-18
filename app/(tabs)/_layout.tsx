@@ -7,6 +7,8 @@ import {Image} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const tabBar = components.tabBar;
+const iconSize = tabBar.iconFrame * 0.98;
+const barHeight = tabBar.height * 0.98;
 
 const TabIcon = ({focused, icon}: TabIconProps) => {
     return (
@@ -15,7 +17,7 @@ const TabIcon = ({focused, icon}: TabIconProps) => {
                 <Image
                     source={icon}
                     resizeMode="contain"
-                    style={{ width: tabBar.iconFrame, height: tabBar.iconFrame }}
+                    style={{ width: iconSize, height: iconSize }}
                 />
             </View>
         </View>
@@ -32,7 +34,7 @@ const TabLayout = () => {
                         tabBarStyle: {
                                 position: 'absolute',
                                 bottom: Math.max(insets.bottom, tabBar.horizontalInset),
-                                height: tabBar.height,
+                                height: barHeight,
                                 marginHorizontal: tabBar.horizontalInset,
                                 borderRadius: tabBar.radius,
                                 backgroundColor: colors.primary,
@@ -40,11 +42,11 @@ const TabLayout = () => {
                                 elevation: 0,
                         },
                         tabBarItemStyle: {
-                                paddingVertical: tabBar.height / 2 - tabBar.iconFrame / 1.6
+                                paddingVertical: barHeight / 2 - iconSize / 1.6
                         },
                         tabBarIconStyle: {
-                                width: tabBar.iconFrame,
-                                height: tabBar.iconFrame,
+                                width: iconSize,
+                                height: iconSize,
                                 alignItems: 'center'
                         }
             }}
