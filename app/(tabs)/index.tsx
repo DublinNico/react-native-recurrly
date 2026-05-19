@@ -1,11 +1,13 @@
 import "@/global.css"
 import { Link } from "expo-router";
 import { Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { styled } from "nativewind";
+import { SafeAreaView as RNSafeAreaView} from "react-native-safe-area-context";
+const SafeAreaView = styled(RNSafeAreaView);
 
 export default function App() {
   return (
-    <SafeAreaView style={{ paddingHorizontal: 20, paddingTop: 20 }}>
+    <SafeAreaView className="flex-1 bg-background p-5">
       <Text className="text-xl font-bold text-success">
         Welcome to Nativewind!
       </Text>
