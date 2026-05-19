@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Select-Object -First 5)",
+      "WebSearch",
+      "WebFetch(domain:www.nativewind.dev)",
+      "WebFetch(domain:medium.com)",
+      "mcp__ide__getDiagnostics"
+    ]
+  }
+}
