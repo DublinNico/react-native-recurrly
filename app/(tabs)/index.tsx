@@ -53,6 +53,7 @@ export default function App() {
                 
                 <FlatList
                   data={UPCOMING_SUBSCRIPTIONS}
+                  keyExtractor={(item) => item.id}
                   renderItem={({ item }) => (
                     <UpcommingSubscriptionCard {...item} />
                   )}

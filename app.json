@@ -40,12 +40,12 @@
         }
       ],
       ["expo-font", { "fonts" : [
-        "./assets/fonts/PlusJakartaSans-Regular.tff",
-        "./assets/fonts/PlusJakartaSans-Bold.tff",
-        "./assets/fonts/PlusJakartaSans-Medium.tff",
-        "./assets/fonts/PlusJakartaSans-SemiBold.tff",
-        "./assets/fonts/PlusJakartaSans-ExtraBold.tff",
-        "./assets/fonts/PlusJakartaSans-Light.tff"
+        "./assets/assets/fonts/PlusJakartaSans-Regular.ttf",
+        "./assets/assets/fonts/PlusJakartaSans-Bold.ttf",
+        "./assets/assets/fonts/PlusJakartaSans-Medium.ttf",
+        "./assets/assets/fonts/PlusJakartaSans-SemiBold.ttf",
+        "./assets/assets/fonts/PlusJakartaSans-ExtraBold.ttf",
+        "./assets/assets/fonts/PlusJakartaSans-Light.ttf"
       ]} ]
     ],
     "experiments": {

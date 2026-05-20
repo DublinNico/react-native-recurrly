@@ -8,7 +8,7 @@ const UpcommingSubscriptionCard = ({ name, price, daysLeft, icon, currency }: Up
       <View className="upcoming-row">
         <Image source={icon} className="upcoming-icon" resizeMode="contain" />
         <View className="flex-1">
-          <Text className="upcoming-price">{formatCurrency(price)}</Text>
+          <Text className="upcoming-price">{formatCurrency(price, currency)}</Text>
           <Text className="upcoming-meta" numberOfLines={1}>
             {" "}
             {daysLeft > 1 ? `${daysLeft} days left` : "Last day"}{" "}
