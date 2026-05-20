@@ -2,20 +2,21 @@ import { formatCurrency } from "@/lib/utils";
 import React from "react";
 import { Image, Text, View } from "react-native";
 
-interface Props {
-  data: UpcomingSubscription;
-}
-
-const UpcommingSubscriptionCard = ({ data }: Props) => {
-  const { name, price, daysLeft, icon, currency } = data;
+const UpcommingSubscriptionCard = ({ name, price, daysLeft, icon, currency }: UpcomingSubscriptionCardProps) => {
   return (
     <View className="upcoming-card">
       <View className="upcoming-row">
         <Image source={icon} className="upcoming-icon" resizeMode="contain" />
-        <View>
+        <View className="flex-1">
           <Text className="upcoming-price">{formatCurrency(price)}</Text>
+          <Text className="upcoming-meta" numberOfLines={1}>
+            {" "}
+            {daysLeft > 1 ? `${daysLeft} days left` : "Last day"}{" "}
+          </Text>
         </View>
       </View>
+
+      <Text className="upcoming-name" numberOfLines={1}>{name}</Text>
     </View>
   );
 };
