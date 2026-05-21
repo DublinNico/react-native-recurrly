@@ -21,7 +21,7 @@ import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
 const SafeAreaView = styled(RNSafeAreaView);
 
 export default function App() {
-  const { subscriptions, addSubscription } = useSubscriptionsStore();
+  const { subscriptions, addSubscription, deleteSubscription } = useSubscriptionsStore();
   const [expandedSubscriptionId, setExpandedSubscriptionId] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -87,6 +87,10 @@ export default function App() {
                 currentId === item.id ? null : item.id,
               )
             }
+            onCancelPress={() => {
+              deleteSubscription(item.id);
+              setExpandedSubscriptionId(null);
+            }}
           />
         )}
         extraData={expandedSubscriptionId}

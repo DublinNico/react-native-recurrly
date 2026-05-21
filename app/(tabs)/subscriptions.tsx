@@ -9,7 +9,7 @@ import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
 const SafeAreaView = styled(RNSafeAreaView);
 
 const Subscriptions = () => {
-  const { subscriptions } = useSubscriptionsStore();
+  const { subscriptions, deleteSubscription } = useSubscriptionsStore();
   const [query, setQuery] = useState("");
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
@@ -22,7 +22,7 @@ const Subscriptions = () => {
         s.category?.toLowerCase().includes(q) ||
         s.plan?.toLowerCase().includes(q)
     );
-  }, [query]);
+  }, [query, subscriptions]);
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={["top"]}>
@@ -58,6 +58,10 @@ const Subscriptions = () => {
                 current === item.id ? null : item.id
               )
             }
+            onCancelPress={() => {
+              deleteSubscription(item.id);
+              setExpandedId(null);
+            }}
           />
         )}
         extraData={expandedId}

@@ -13,6 +13,18 @@ import {
   View,
 } from "react-native";
 
+const DOMAIN_OVERRIDES: Record<string, string> = {
+  aib: "aib.ie",
+  "tuath housing": "tuathhousing.ie",
+  tuath: "tuathhousing.ie",
+};
+
+const getDomain = (name: string): string => {
+  const lower = name.trim().toLowerCase();
+  const firstWord = lower.split(/\s+/)[0];
+  return DOMAIN_OVERRIDES[lower] ?? DOMAIN_OVERRIDES[firstWord] ?? `${firstWord}.com`;
+};
+
 const CATEGORIES = [
   "Entertainment",
   "AI Tools",
@@ -75,7 +87,7 @@ const CreateSubscriptionModal = ({
         : dayjs().add(1, "year")
     ).toISOString();
 
-    const domain = `${name.trim().toLowerCase().split(/\s+/)[0]}.com`;
+    const domain = getDomain(name);
     const icon = { uri: `https://logos-api.apistemic.com/domain:${domain}` };
 
     onSubmit({
