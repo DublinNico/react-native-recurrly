@@ -1,11 +1,15 @@
 import "@/global.css";
-import { ClerkProvider, useAuth } from "@clerk/expo";
+import { ClerkProvider, useAuth, useUser } from "@clerk/expo";
 import { tokenCache } from "@clerk/expo/token-cache";
-import { SplashScreen, Stack, useRouter, useSegments } from "expo-router";
+import { SplashScreen, Stack, useRouter, useSegments, usePathname } from "expo-router";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
 import { colors } from "@/constants/theme";
+import { PostHogProvider, usePostHog } from "posthog-react-native";
+
+const posthogKey = process.env.EXPO_PUBLIC_POSTHOG_KEY!;
+const posthogHost = process.env.EXPO_PUBLIC_POSTHOG_HOST!;
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
 
@@ -14,6 +18,27 @@ if (!publishableKey) {
 }
 
 SplashScreen.preventAutoHideAsync().catch(console.error);
+
+function ScreenTracker() {
+  const pathname = usePathname();
+  const posthog = usePostHog();
+  const { user } = useUser();
+
+  useEffect(() => {
+    posthog.screen(pathname);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (user) {
+      posthog.identify(user.id, {
+        email: user.primaryEmailAddress?.emailAddress ?? null,
+        name: user.fullName ?? null,
+      });
+    }
+  }, [user]);
+
+  return null;
+}
 
 function InitialLayout() {
   const { isSignedIn, isLoaded } = useAuth();
@@ -60,8 +85,11 @@ export default function RootLayout() {
   if (!fontsLoaded) return null;
 
   return (
-    <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
-      <InitialLayout />
-    </ClerkProvider>
+    <PostHogProvider apiKey={posthogKey} options={{ host: posthogHost }}>
+      <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
+        <ScreenTracker />
+        <InitialLayout />
+      </ClerkProvider>
+    </PostHogProvider>
   );
 }

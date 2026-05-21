@@ -1,7 +1,8 @@
+import { icons } from "@/constants/icons";
 import { formatCurrency, formatStatusLabel, formatSubscriptionDateTime } from "@/lib/utils";
 import clsx from "clsx";
-import React from "react";
-import { Image, Pressable, Text, View } from "react-native";
+import React, { useState } from "react";
+import { Image, Pressable, Text, TouchableOpacity, View } from "react-native";
 
 const SubscriptionCard = ({
   name,
@@ -18,7 +19,10 @@ const SubscriptionCard = ({
   startDate,
   status,
   onPress,
+  onCancelPress,
 }: SubscriptionCardProps) => {
+  const [imgError, setImgError] = useState(false);
+
   return (
     <Pressable onPress={onPress}
 
@@ -27,7 +31,11 @@ const SubscriptionCard = ({
     >
       <View className="sub-head">
         <View className="sub-main">
-          <Image source={icon} className="sub-icon" />
+          <Image
+            source={imgError ? icons.wallet : icon}
+            className="sub-icon"
+            onError={() => setImgError(true)}
+          />
           <View className="sub-copy">
             <Text numberOfLines={1} className="sub-title">
               {name}
@@ -99,6 +107,14 @@ const SubscriptionCard = ({
                     </View>
                 </View>
             </View>
+
+            <TouchableOpacity
+              className="sub-cancel"
+              onPress={onCancelPress}
+              activeOpacity={0.8}
+            >
+              <Text className="sub-cancel-text">Delete Subscription</Text>
+            </TouchableOpacity>
         </View>
     )}
 

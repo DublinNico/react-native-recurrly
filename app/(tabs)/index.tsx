@@ -1,95 +1,112 @@
+import CreateSubscriptionModal from "@/components/CreateSubscriptionModal";
 import ListHeading from "@/components/ListHeading";
 import SubscriptionCard from "@/components/SubscriptionCard";
 import UpcommingSubscriptionCard from "@/components/UpcommingSubscriptionCard";
 import {
   HOME_BALANCE,
-  HOME_SUBSCRIPTIONS,
   HOME_USER,
   UPCOMING_SUBSCRIPTIONS,
 } from "@/constants/data";
 import { icons } from "@/constants/icons";
 import images from "@/constants/images";
+import { useSubscriptionsStore } from "@/store/subscriptionsStore";
 import "@/global.css";
 import { formatCurrency } from "@/lib/utils";
 import dayjs from "dayjs";
 import { styled } from "nativewind";
 import React, { useState } from "react";
-import { FlatList, Image, Text, View } from "react-native";
+import { FlatList, Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
 
 const SafeAreaView = styled(RNSafeAreaView);
 
 export default function App() {
-  const [expandedSubscriptionId, setExpandedSubscriptionId] = useState<
-    string | null
-  >(null);
+  const { subscriptions, addSubscription, deleteSubscription } = useSubscriptionsStore();
+  const [expandedSubscriptionId, setExpandedSubscriptionId] = useState<string | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleAddSubscription = (subscription: Subscription) => {
+    addSubscription(subscription);
+    setModalVisible(false);
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-background p-5">
-
-        <FlatList
-          ListHeaderComponent={() => (
-            <>
-              <View className="home-header">
-                <View className="home-user">
-                  <Image source={images.avatar} className="home-avatar" />
-                  <Text className="home-user-name">{HOME_USER.name}</Text>
-                </View>
+      <FlatList
+        ListHeaderComponent={() => (
+          <>
+            <View className="home-header">
+              <View className="home-user">
+                <Image source={images.avatar} className="home-avatar" />
+                <Text className="home-user-name">{HOME_USER.name}</Text>
+              </View>
+              <Pressable onPress={() => setModalVisible(true)}>
                 <Image source={icons.add} className="home-add-icon" />
+              </Pressable>
+            </View>
+            <View className="home-balance-card">
+              <Text className="home-balance-label">Balance</Text>
+              <View className="home-balance-row">
+                <Text className="home-balance-amount">
+                  {formatCurrency(HOME_BALANCE.amount)}
+                </Text>
+                <Text className="home-balance-date">
+                  {dayjs(HOME_BALANCE.nextRenewalDate).format("DD/MM")}
+                </Text>
               </View>
-              <View className="home-balance-card">
-                <Text className="home-balance-label">Balance</Text>
-                <View className="home-balance-row">
-                  <Text className="home-balance-amount">
-                    {formatCurrency(HOME_BALANCE.amount)}
-                  </Text>
-                  <Text className="home-balance-date">
-                    {dayjs(HOME_BALANCE.nextRenewalDate).format("DD/MM")}
-                  </Text>
-                </View>
-              </View>
+            </View>
 
-              <View className="mb-5">
-                <ListHeading title="Upcoming" />
-                
-                <FlatList
-                  data={UPCOMING_SUBSCRIPTIONS}
-                  keyExtractor={(item) => item.id}
-                  renderItem={({ item }) => (
-                    <UpcommingSubscriptionCard {...item} />
-                  )}
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  ListEmptyComponent={
-                    <Text className="home-empty-state">
-                      No upcoming renewals yet.
-                    </Text>
-                  }
-                />
-              </View>
-              <ListHeading title="All Subscriptions" />
-            </>
-          )}
-          data={HOME_SUBSCRIPTIONS}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <SubscriptionCard
-              {...item}
-              expanded={expandedSubscriptionId === item.id}
-              onPress={() =>
-                setExpandedSubscriptionId((currentId) =>
-                  currentId === item.id ? null : item.id,
-                )
-              }
-            />
-          )}
-          extraData={expandedSubscriptionId}
-          ItemSeparatorComponent={() => <View className="h-4" />}
-          showsVerticalScrollIndicator={false}
-          ListEmptyComponent={
-            <Text className="home-empty-state"> No Subscriptions yet.</Text>
-          }
-          contentContainerClassName="pb-30"
-        />
+            <View className="mb-5">
+              <ListHeading title="Upcoming" />
+              <FlatList
+                data={UPCOMING_SUBSCRIPTIONS}
+                keyExtractor={(item: UpcomingSubscription) => item.id}
+                renderItem={({ item }: { item: UpcomingSubscription }) => (
+                  <UpcommingSubscriptionCard {...item} />
+                )}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                ListEmptyComponent={
+                  <Text className="home-empty-state">
+                    No upcoming renewals yet.
+                  </Text>
+                }
+              />
+            </View>
+            <ListHeading title="All Subscriptions" />
+          </>
+        )}
+        data={subscriptions}
+        keyExtractor={(item: Subscription) => item.id}
+        renderItem={({ item }: { item: Subscription }) => (
+          <SubscriptionCard
+            {...item}
+            expanded={expandedSubscriptionId === item.id}
+            onPress={() =>
+              setExpandedSubscriptionId((currentId: string | null) =>
+                currentId === item.id ? null : item.id,
+              )
+            }
+            onCancelPress={() => {
+              deleteSubscription(item.id);
+              setExpandedSubscriptionId(null);
+            }}
+          />
+        )}
+        extraData={expandedSubscriptionId}
+        ItemSeparatorComponent={() => <View className="h-4" />}
+        showsVerticalScrollIndicator={false}
+        ListEmptyComponent={
+          <Text className="home-empty-state"> No Subscriptions yet.</Text>
+        }
+        contentContainerClassName="pb-30"
+      />
+
+      <CreateSubscriptionModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onSubmit={handleAddSubscription}
+      />
     </SafeAreaView>
   );
 }
