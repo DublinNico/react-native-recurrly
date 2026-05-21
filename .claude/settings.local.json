@@ -17,7 +17,9 @@
       "Bash(node -e \"console.log\\(require\\('./node_modules/expo-secure-store/package.json'\\).version\\)\")",
       "Bash(node *)",
       "Bash(xargs grep '\"name\"')",
-      "Bash(xargs grep -l \"SignInFutureResource\\\\|SignInSignalValue\")"
+      "Bash(xargs grep -l \"SignInFutureResource\\\\|SignInSignalValue\")",
+      "Bash(git checkout *)",
+      "Bash(npm install *)"
     ]
   }
 }

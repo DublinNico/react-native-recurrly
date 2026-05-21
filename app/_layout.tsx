@@ -31,8 +31,8 @@ function ScreenTracker() {
   useEffect(() => {
     if (user) {
       posthog.identify(user.id, {
-        email: user.primaryEmailAddress?.emailAddress,
-        name: user.fullName,
+        email: user.primaryEmailAddress?.emailAddress ?? null,
+        name: user.fullName ?? null,
       });
     }
   }, [user]);
