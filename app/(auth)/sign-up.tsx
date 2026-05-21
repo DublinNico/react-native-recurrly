@@ -89,7 +89,11 @@ export default function SignUp() {
       return;
     }
 
-    await signUp.verifications.sendEmailCode();
+    const { error: sendError } = await signUp.verifications.sendEmailCode();
+    if (sendError) {
+      setErrorMessage(sendError.longMessage ?? sendError.message ?? "Failed to send verification email.");
+      return;
+    }
   };
 
   const handleVerify = async () => {
@@ -190,7 +194,12 @@ export default function SignUp() {
 
                 <Pressable
                   className="auth-secondary-button"
-                  onPress={() => signUp.verifications.sendEmailCode()}
+                  onPress={async () => {
+                    const { error: resendError } = await signUp.verifications.sendEmailCode();
+                    if (resendError) {
+                      setErrorMessage(resendError.longMessage ?? resendError.message ?? "Failed to resend code.");
+                    }
+                  }}
                   disabled={isLoading}
                 >
                   <Text className="auth-secondary-button-text">

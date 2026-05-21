@@ -11,8 +11,6 @@
       "Bash(npx tsc *)",
       "Bash(node -p \"require\\('./node_modules/expo-router/package.json'\\).version\")",
       "Bash(node -p \"require\\('./node_modules/@clerk/react/package.json'\\).version\")",
-      "Bash(dir C:\\\\Users\\\\tonyn\\\\Desktop\\\\Web Dev\\\\my-first-app\\\\node_modules\\\\@clerk *)",
-      "Bash(Get-ChildItem -Recurse -Path \"C:\\\\Users\\\\tonyn\\\\Desktop\\\\Web Dev\\\\my-first-app\" -Force)",
       "Bash(Select-Object FullName)",
       "Bash(grep -E \"\\\\.json$|\\\\.js$|\\\\.config\")",
       "Bash(npx expo *)",

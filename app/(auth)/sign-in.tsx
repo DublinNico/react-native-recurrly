@@ -198,7 +198,11 @@ export default function SignIn() {
       signIn.status === "needs_second_factor" ||
       signIn.status === "needs_client_trust"
     ) {
-      await signIn.mfa.sendEmailCode();
+      const { error: mfaError } = await signIn.mfa.sendEmailCode();
+      if (mfaError) {
+        setErrorMessage(mfaError.longMessage ?? mfaError.message ?? "Failed to send verification code.");
+        return;
+      }
     } else {
       setErrorMessage(`Sign in incomplete (status: ${signIn.status}). Please try again.`);
     }
@@ -220,8 +224,14 @@ export default function SignIn() {
         code={code}
         setCode={setCode}
         onVerify={handleVerify}
-        onResend={() => signIn.mfa.sendEmailCode()}
-        onReset={() => signIn.reset()}
+        onResend={async () => {
+          const { error } = await signIn.mfa.sendEmailCode();
+          if (error) setErrorMessage(error.longMessage ?? error.message ?? "Failed to resend code.");
+        }}
+        onReset={async () => {
+          const { error } = await signIn.reset();
+          if (error) setErrorMessage(error.longMessage ?? error.message ?? "Failed to reset sign in.");
+        }}
         isLoading={isLoading}
         codeError={errors?.fields?.code?.message}
       />
