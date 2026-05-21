@@ -53,8 +53,8 @@ export default function App() {
                 
                 <FlatList
                   data={UPCOMING_SUBSCRIPTIONS}
-                  keyExtractor={(item) => item.id}
-                  renderItem={({ item }) => (
+                  keyExtractor={(item: UpcomingSubscription) => item.id}
+                  renderItem={({ item }: { item: UpcomingSubscription }) => (
                     <UpcommingSubscriptionCard {...item} />
                   )}
                   horizontal
@@ -70,13 +70,13 @@ export default function App() {
             </>
           )}
           data={HOME_SUBSCRIPTIONS}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
+          keyExtractor={(item: Subscription) => item.id}
+          renderItem={({ item }: { item: Subscription }) => (
             <SubscriptionCard
               {...item}
               expanded={expandedSubscriptionId === item.id}
               onPress={() =>
-                setExpandedSubscriptionId((currentId) =>
+                setExpandedSubscriptionId((currentId: string | null) =>
                   currentId === item.id ? null : item.id,
                 )
               }
